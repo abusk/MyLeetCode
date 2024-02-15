@@ -1,14 +1,13 @@
 class Solution:
     def isSubsequence(self, s: str, t: str) -> bool:
-        i, j = 0,0
-        while i < len(s) and j < len(t):
+        @cache
+        def dp(i, j):
+            if i == len(s):
+                return True
+            if j == len(t) and i < len(s):
+                return False
             if s[i] == t[j]:
-                i +=1
-                j +=1
-            else:
-                j +=1
-        if i == len(s):
-            return True
-        else:
-            False
+                return dp(i+1, j+1)
+            return dp(i, j+1)
+        return dp(0, 0)
         
