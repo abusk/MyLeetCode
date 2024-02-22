@@ -5,9 +5,12 @@
 class Solution:
     def findCelebrity(self, n: int) -> int:
         self.n = n
-        for i in range(n):
-            if self.is_celebrity(i):
-                return i
+        celebrity_candidate = 0
+        for i in range(1, n):
+            if knows(celebrity_candidate, i):
+                celebrity_candidate = i
+        if self.is_celebrity(celebrity_candidate):
+            return celebrity_candidate
         return -1
     def is_celebrity(self, i):
         for j in range(self.n):
