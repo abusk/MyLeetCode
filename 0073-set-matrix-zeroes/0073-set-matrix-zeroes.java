@@ -10,10 +10,10 @@ class Solution {
                     row = true;
                     col = true;
                 } else if(j == 0 && matrix[i][j] == 0) {
-                    row = true;
+                    col = true;
                     matrix[0][0] = 0;
                 } else if(i == 0 && matrix[i][j] == 0) {
-                    col = true;
+                    row = true;
                     matrix[0][0] = 0;
                 } else if(matrix[i][j] == 0){
                     matrix[0][j] = 0;
@@ -29,12 +29,12 @@ class Solution {
           }
         }
         
-        if(row) {
+        if(col) {
            for (int i = 0; i < R; i++) {
                matrix[i][0] = 0;
            } 
         }
-        if(col) {
+        if(row) {
            for (int i = 0; i < C; i++) {
                matrix[0][i] = 0;
            } 
