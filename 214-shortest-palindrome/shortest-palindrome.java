@@ -40,22 +40,52 @@
 //     }
 // }
 
+// class Solution {
+
+//     public String shortestPalindrome(String s) {
+//         int length = s.length();
+//         String reversedString = new StringBuilder(s).reverse().toString();
+
+//         // Iterate through the string to find the longest palindromic prefix
+//         for (int i = 0; i < length; i++) {
+//             if (
+//                 s.substring(0, length - i).equals(reversedString.substring(i))
+//             ) {
+//                 return new StringBuilder(reversedString.substring(0, i))
+//                     .append(s)
+//                     .toString();
+//             }
+//         }
+//         return "";
+//     }
+// }
+
 class Solution {
 
     public String shortestPalindrome(String s) {
-        int length = s.length();
         String reversedString = new StringBuilder(s).reverse().toString();
+        String combinedString = s + "#" + reversedString;
+        int[] prefixTable = buildPrefixTable(combinedString);
 
-        // Iterate through the string to find the longest palindromic prefix
-        for (int i = 0; i < length; i++) {
-            if (
-                s.substring(0, length - i).equals(reversedString.substring(i))
-            ) {
-                return new StringBuilder(reversedString.substring(0, i))
-                    .append(s)
-                    .toString();
+        int palindromeLength = prefixTable[combinedString.length() - 1];
+        StringBuilder suffix = new StringBuilder(
+            s.substring(palindromeLength)
+        ).reverse();
+        return suffix.append(s).toString();
+    }
+
+    private int[] buildPrefixTable(String s) {
+        int[] prefixTable = new int[s.length()];
+        int length = 0;
+        for (int i = 1; i < s.length(); i++) {
+            while (length > 0 && s.charAt(i) != s.charAt(length)) {
+                length = prefixTable[length - 1];
             }
+            if (s.charAt(i) == s.charAt(length)) {
+                length++;
+            }
+            prefixTable[i] = length;
         }
-        return "";
+        return prefixTable;
     }
 }
