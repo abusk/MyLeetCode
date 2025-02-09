@@ -16,13 +16,9 @@ class Solution {
             if(v <= 1) continue;
             dd += (v * (v-1) /2);
         }
-        long all = 0;
-        for(int i = 1; i<l; i++) {
-            all += i;
-        }
-    
-        System.out.println(all);
-        System.out.println(dd);
+        long ll = (long)l;
+        long all = (ll * (ll-1) /2L);
+
         return all-dd;
     }
 }
