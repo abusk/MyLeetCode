@@ -17,22 +17,12 @@ class Solution {
             dd += (v * (v-1) /2);
         }
         long all = 0;
-        boolean used = false;
         for(int i = 1; i<l; i++) {
-            if(all >= Integer.MAX_VALUE - i && !used) {
-                all -= dd;
-                all += i;
-                used = true;
-            } else {
-                all += i;
-            }
-        }
-        if(!used) {
-            all -= dd;
+            all += i;
         }
     
         System.out.println(all);
         System.out.println(dd);
-        return all;
+        return all-dd;
     }
 }
