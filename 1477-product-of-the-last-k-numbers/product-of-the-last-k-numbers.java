@@ -1,24 +1,40 @@
 class ProductOfNumbers {
-    List<Integer> mul;
+
+    // Stores cumulative product of the stream
+    private ArrayList<Integer> prefixProduct = new ArrayList<>();
+    private int size = 0;
+
     public ProductOfNumbers() {
-        mul = new ArrayList<>();
+        // Initialize the product list with 1 to handle multiplication logic
+        this.prefixProduct.add(1);
+        this.size = 0;
     }
-    
+
     public void add(int num) {
-        mul.add(num);
-    }
-    
-    public int getProduct(int k) {
-        int s = mul.size() -1;
-        int m = 1;
-        for(int i = s; i >= Math.max(0, s - k+1); i--) {
-            int nm = mul.get(i);
-            if(nm == 0) {
-                return 0;
-            }
-            m *= nm;
+        if (num == 0) {
+            // If num is 0, reset the cumulative products since multiplication
+            // with 0 invalidates previous products
+            this.prefixProduct = new ArrayList<Integer>();
+            this.prefixProduct.add(1);
+            this.size = 0;
+        } else {
+            // Append the cumulative product of the current number with the last
+            // product
+            this.prefixProduct.add(this.prefixProduct.get(size) * num);
+            this.size++;
         }
-        return m;
+    }
+
+    public int getProduct(int k) {
+        // Check if the requested product length exceeds the size of the valid
+        // product list
+        if (k > this.size) return 0;
+
+        // Compute the product of the last k elements using division
+        return (
+            this.prefixProduct.get(this.size) /
+            this.prefixProduct.get(this.size - k)
+        );
     }
 }
 
