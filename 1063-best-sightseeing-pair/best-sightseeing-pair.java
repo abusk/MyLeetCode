@@ -7,12 +7,11 @@ class Solution {
             plus[i] = values[i] + i;
             minus[i] = values[i] - i;
         }
-        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
-        pq.offer(plus[0]);
+        int mplus = plus[0];
         int max = Integer.MIN_VALUE;
         for(int i = 1; i<len; i++) {
-            max = Math.max(max, minus[i] + pq.peek());
-            pq.offer(plus[i]);
+            max = Math.max(max, minus[i] + mplus);
+            mplus = Math.max(mplus, plus[i]);
         }
         return max;
     }
