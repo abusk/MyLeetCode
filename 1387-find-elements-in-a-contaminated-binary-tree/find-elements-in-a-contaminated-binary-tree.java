@@ -14,7 +14,6 @@
  * }
  */
 class FindElements {
-    TreeNode root;
     Set<Integer> st;
     public FindElements(TreeNode root) {
         st = new HashSet<>();
@@ -37,7 +36,6 @@ class FindElements {
                 q.offer(right);
             }
         }
-        this.root = root;
     }
     
     public boolean find(int target) {
