@@ -10,18 +10,12 @@ class Solution {
             if(nums[mid] == target) {
                 return mid;
             }
-            if(mid == 0 && target <= nums[mid]) {
-                return 0;
-            }
-            if(mid > 0 && target > nums[mid-1] && target <= nums[mid]) {
-                return mid;
-            }
             if(target > nums[mid]) {
                 s = mid+1;
             } else {
                 e = mid-1;
             }
         }
-        return target > nums[e] ? e+1 : 0;
+        return s;
     }
 }
