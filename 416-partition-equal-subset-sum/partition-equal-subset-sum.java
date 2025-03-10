@@ -1,32 +1,31 @@
 class Solution {
-    public boolean canPartition(int[] nums) {
-        int total = Arrays.stream(nums).sum();
-        if(total % 2 == 1) {
+    public static boolean canPartition(int[] nums) {
+        int sum = 0;
+        int len = nums.length;
+        for(int i = 0; i<len; i++) {
+            sum += nums[i];
+        }
+        if(sum % 2 != 0) {
             return false;
         }
-        int sum = total / 2;
-        int len = nums.length;
-        boolean dp[][] = new boolean[len+1][sum +1];
+        int hsum = sum /2;
+        boolean dp[][] = new boolean[len+1][hsum +1];
         dp[0][0] = true;
         for(int i = 1; i <= len; i++) {
-            for(int w = 0; w <= sum; w++) {
-                if(w < nums[i-1]){
-                    dp[i][w] = dp[i-1][w];
+            for (int j = 1; j<= hsum; j++) {
+                if(nums[i-1] <= j) {
+                    dp[i][j] = dp[i-1][j] || dp[i-1][j - nums[i-1]];
                 } else {
-                    dp[i][w] = dp[i-1][w - nums[i-1]] || dp[i-1][w];
+                    dp[i][j] = dp[i-1][j];
                 }
             }
         }
-        return dp[len][sum];
-        //return dp(nums, total / 2, 0);
+        return dp[len][hsum];
     }
-    // public boolean dp(int[] nums, int target, int i) {
-    //     if(target == 0) {
-    //         return true;
-    //     }
-    //     if(i == nums.length) {
-    //         return false;
-    //     }
-    //     return dp(nums, target - nums[i], i+1) || dp(nums, target, i+1);
-    // }
+
+    public static void main(String[] args) {
+        int [] nums = {6,8,6};
+        System.out.println(canPartition(nums));
+    }
+
 }
