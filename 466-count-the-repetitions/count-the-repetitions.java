@@ -1,41 +1,27 @@
 import java.util.*;
 
-class Solution {
+public class Solution {
     public static int getMaxRepetitions(String s1, int n1, String s2, int n2) {
-        int s1Len = s1.length(), s2Len = s2.length();
-        Map<Integer, int[]> seen = new HashMap<>(); // Stores cycles
+        char[] array1 = s1.toCharArray(), array2 = s2.toCharArray();
+        int count1 = 0, count2 = 0, i = 0, j = 0;
         
-        int s1Count = 0, s2Count = 0, index = 0; // Tracking cycles
-        while (s1Count < n1) {
-            for (char c : s1.toCharArray()) {
-                if (c == s2.charAt(index)) {
-                    index++;
-                    if (index == s2Len) { // Found one full s2 in the cycle
-                        index = 0;
-                        s2Count++;
-                    }
+        while (n1 > count1) {
+            if (array2[j] == array1[i]) {
+                j++;
+                if (array2.length == j) {
+                    j = 0;
+                    count2++;
                 }
             }
-            s1Count++;
-
-            // Check for cycle
-            if (seen.containsKey(index)) {
-                int[] prev = seen.get(index);
-                int prevS1Count = prev[0], prevS2Count = prev[1];
-
-                int cycleLen = s1Count - prevS1Count;
-                int cycleS2Count = s2Count - prevS2Count;
-                int remainingCycles = (n1 - s1Count) / cycleLen;
-
-                s1Count += remainingCycles * cycleLen;
-                s2Count += remainingCycles * cycleS2Count;
-            } else {
-                seen.put(index, new int[]{s1Count, s2Count});
+            i++;
+            if (array1.length == i) {
+                i = 0;
+                count1++;
             }
         }
-
-        return s2Count / n2;
-    }
+        
+        return count2 / n2;
+        }
 
     public static void main(String[] args) {
         System.out.println(getMaxRepetitions("aaa", 3, "aa", 1));  // Output: 4
