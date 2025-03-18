@@ -15,13 +15,10 @@ class Solution {
         int e = ww.length;
         while(s <= e) {
             int mid = (s+e)/2;
-            if(ww[mid] == target) {
-                return mid;
-            }
-            if(ww[mid] < target) {
-                s = mid+1;
-            } else {
+            if(ww[mid] > target) {
                 e = mid -1;
+            }else {
+                s = mid +1;
             }
         }
         return s;
@@ -30,14 +27,7 @@ class Solution {
     public int pickIndex() {
         Random rand = new Random();
         int next = rand.nextInt(0, sum);
-        int i = 0;
-        for(;i<ww.length; i++) {
-            if(ww[i] > next) {
-                return i;
-            }
-        }
-        return i-1;
-        //return bs(next);
+        return bs(next);
     }
 }
 
