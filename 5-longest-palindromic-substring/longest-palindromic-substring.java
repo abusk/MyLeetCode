@@ -1,33 +1,52 @@
 class Solution {
     public static String longestPalindrome(String s) {
-        String ans = "";
-        for(int i = 0; i<s.length(); i++) {
-            int[] odd = dp(s, i, i);
-            int st = odd[0], en = odd[1];
-            if(en - st + 1 > ans.length()) {
-                ans = s.substring(st, en+1);
+        int len = s.length();
+        boolean [][] dp = new boolean[len][len];
+        int[] ans = new int[]{0, 0};
+        for(int i = 0; i<len; i++) {
+            dp[i][i] = true;
+        }
+        for(int i = 0; i<len-1; i++) {
+            if(s.charAt(i) == s.charAt(i+1)) {
+                dp[i][i+1] = true;
+                ans[0] = i;
+                ans[1] = i+1;
             }
         }
-        for(int i = 0; i<s.length()-1; i++) {
-            int[] even = dp(s, i, i+1);
-            int st = even[0], en = even[1];
-            if(en - st + 1 > ans.length()) {
-                ans = s.substring(st, en+1);
+        for(int i = 2; i<len; i++) {
+            for(int start = 0; start < len - i; start++) {
+                int end = start + i;
+                if(s.charAt(start) == s.charAt(end) && dp[start+1][end-1]) {
+                    dp[start][end] = true;
+                    if(ans[1] - ans[0] < end - start) {
+                        ans[0] = start;
+                        ans[1] = end;
+                    }
+                }
             }
         }
-        return ans;
+        return s.substring(ans[0], ans[1]+1);
     }
-    public static int[] dp(String s, int i, int j) {
-        if(i < 0 || j >= s.length()) {
-            return new int[] {i+1, j-1};
+    public static String dp(String s, int i, int j) {
+        if(i > j) {
+            return "";
         }
-        if(s.charAt(i) != s.charAt(j)) {
-            return new int[]{i+1, j-1};
+        if(isPal(s, i, j)) {
+            return s.substring(i, j+1);
         }
-        if(s.charAt(i) == s.charAt(j)) {
-            return dp(s, i-1, j+1);
+        String p1 = dp(s, i+1, j);
+        String p2 = dp(s, i, j-1);
+        return p1.length() >= p2.length() ? p1 : p2;
+    }
+    public static boolean isPal(String s, int i, int j) {
+        while(i < j) {
+            if(s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+            i++;
+            j--;
         }
-        return new int[] {-1, -1};
+        return true;
     }
 
     public static void main(String[] args) {
