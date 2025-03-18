@@ -3,25 +3,17 @@ class Solution {
         int ans = 1;
         int s = 0;
         int e = 1;
+        int cur = nums[0];
         while (e < nums.length) {
-            while(s < e && !isValid(nums, s, e)) {
+            while((cur & nums[e]) != 0) {
+                cur = cur ^ nums[s];
                 s++;
             }
             ans = Math.max(ans, e - s+1);
+            cur = cur | nums[e];
             e++;
-            
         }
         return ans;
-    }
-
-    public static boolean isValid(int[] nums, int s, int e) {
-        int nm = nums[e];
-        for(int i = s; i<e; i++) {
-            if((nm & nums[i]) != 0) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public static void main(String[] args) {
