@@ -12,7 +12,7 @@
  *     public boolean isInteger();
  *
  *     // @return the single integer that this NestedInteger holds, if it holds a single integer
- *     // Return null if this NestedInteger holds a nested list
+ *     // The result is undefined if this NestedInteger holds a nested list
  *     public Integer getInteger();
  *
  *     // Set this NestedInteger to hold a single integer.
@@ -22,25 +22,23 @@
  *     public void add(NestedInteger ni);
  *
  *     // @return the nested list that this NestedInteger holds, if it holds a nested list
- *     // Return empty list if this NestedInteger holds a single integer
+ *     // The result is undefined if this NestedInteger holds a single integer
  *     public List<NestedInteger> getList();
  * }
  */
 class Solution {
-
     public int depthSum(List<NestedInteger> nestedList) {
-        return dfs(nestedList, 1);
+        return recur(nestedList, 1);
     }
-
-    private int dfs(List<NestedInteger> list, int depth) {
-        int total = 0;
-        for (NestedInteger nested : list) {
-            if (nested.isInteger()) {
-                total += nested.getInteger() * depth;
+    public int recur(List<NestedInteger> nestedList, int dep) {
+        int sum = 0;
+        for(NestedInteger ni : nestedList) {
+            if(ni.isInteger()) {
+                sum += ni.getInteger() * dep;
             } else {
-                total += dfs(nested.getList(), depth + 1);
+                sum += recur(ni.getList(), dep+1);
             }
         }
-        return total;
+        return sum;
     }
 }
