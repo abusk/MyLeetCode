@@ -1,9 +1,15 @@
 class Solution {
     public int minNumberOperations(int[] target) {
-        int count = target[0];
-        for(int i = 1; i<target.length; i++) {
-            count += Math.max(target[i] - target[i-1], 0);
+
+        int prev = 0;
+        int ans = 0;
+        for(int i = 0; i<target.length; i++) {
+            int cur = target[i];
+            if(cur >= prev) {
+                ans += cur-prev;
+            }
+            prev = cur;
         }
-        return count;
+        return ans;
     }
 }
