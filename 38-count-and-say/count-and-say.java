@@ -1,14 +1,27 @@
 class Solution {
     public String countAndSay(int n) {
-        String currentString = "1";
-        for (int i = 2; i <= n; i++) {
-            String nextString = "";
-            for (int j = 0, k = 0; j < currentString.length(); j = k) {
-                while (k < currentString.length() && currentString.charAt(k) == currentString.charAt(j)) k++;
-                nextString += Integer.toString(k - j) + currentString.charAt(j);
-            }
-            currentString = nextString;
+        if (n == 1) {
+            return "1";
         }
-        return currentString;
+
+        String prev = countAndSay(n - 1); // recursive call
+        StringBuilder ans = new StringBuilder();
+
+        int count = 1;
+        for (int i = 1; i < prev.length(); i++) {
+            if (prev.charAt(i) == prev.charAt(i - 1)) {
+                count++;
+            } else {
+                ans.append(count);
+                ans.append(prev.charAt(i - 1));
+                count = 1;
+            }
+        }
+
+        // Append the last group
+        ans.append(count);
+        ans.append(prev.charAt(prev.length() - 1));
+
+        return ans.toString();
     }
 }
