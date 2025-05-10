@@ -1,31 +1,17 @@
 class Solution {
-    private boolean checkPalindrome(String s, int i, int j) {
-        while (i < j) {
-            if (s.charAt(i) != s.charAt(j)) {
-                return false;
-            }
-            
-            i++;
-            j--;
-        }
-        
-        return true;
-    }
-    
     public boolean validPalindrome(String s) {
-        int i = 0;
-        int j = s.length() - 1;
-        
-        while (i < j) {
-            // Found a mismatched pair - try both deletions
-            if (s.charAt(i) != s.charAt(j)) {
-                return (checkPalindrome(s, i, j - 1) || checkPalindrome(s, i + 1, j));
-            }
-            
-            i++;
-            j--;
+        return check(s, 0, s.length()-1, 1);
+    }
+    public boolean check(String s, int i, int j, int c) {
+        if(i >= j) {
+            return true;
         }
-        
-        return true;
+        if(s.charAt(i) == s.charAt(j)) {
+            return check(s, i+1, j-1, c);
+        }
+        if(s.charAt(i) != s.charAt(j) &&  c <= 0) {
+            return false;
+        }
+        return check(s, i+1, j, c-1) || check(s, i, j-1, c-1);
     }
 }
