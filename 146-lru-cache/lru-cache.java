@@ -1,69 +1,64 @@
-class ListNode {
-    int key;
-    int val;
-    ListNode next;
-    ListNode prev;
-
-    public ListNode(int key, int val) {
+class Node {
+    public Node next;
+    public Node prev;
+    public int key;
+    public int value;
+    public Node(int key, int value) {
         this.key = key;
-        this.val = val;
+        this.value = value;
     }
 }
-
 class LRUCache {
-    int capacity;
-    Map<Integer, ListNode> dic;
-    ListNode head;
-    ListNode tail;
-    
+    Map<Integer, Node> map;
+    Node head;
+    Node tail;
+    int size;
     public LRUCache(int capacity) {
-        this.capacity = capacity;
-        dic = new HashMap<>();
-        head = new ListNode(-1, -1);
-        tail = new ListNode(-1, -1);
+        this.size = capacity;
+        map = new HashMap<>();
+        head = new Node(-1, -1);
+        tail = new Node(-1, -1);
         head.next = tail;
         tail.prev = head;
     }
-    
+
     public int get(int key) {
-        if (!dic.containsKey(key)) {
-            return -1;
+        int result = -1;
+        if(this.map.containsKey(key)) {
+            result = this.map.get(key).value;
+            Node eNode = this.map.get(key);
+            deleteNode(eNode);
+            Node updateNode = new Node(key, result);
+            addNode(updateNode);
+            this.map.put(key, updateNode);
         }
-        
-        ListNode node = dic.get(key);
-        remove(node);
-        add(node);
-        return node.val;
+        return result;
     }
-    
-    public void put(int key, int value) {
-        if (dic.containsKey(key)) {
-            ListNode oldNode = dic.get(key);
-            remove(oldNode);
-        }
-        
-        ListNode node = new ListNode(key, value);
-        dic.put(key, node);
-        add(node);
-        
-        if (dic.size() > capacity) {
-            ListNode nodeToDelete = head.next;
-            remove(nodeToDelete);
-            dic.remove(nodeToDelete.key);
-        }
-    }
-    
-    public void add(ListNode node) {
-        ListNode previousEnd = tail.prev;
-        previousEnd.next = node;
-        node.prev = previousEnd;
-        node.next = tail;
-        tail.prev = node;
-    }
-    
-    public void remove(ListNode node) {
+    private void deleteNode(Node node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
+    }
+    private void addNode(Node updateNode) {
+        updateNode.next = head.next;
+        updateNode.prev = head;
+        head.next.prev = updateNode;
+        head.next = updateNode;
+    }
+
+    public void put(int key, int value) {
+        Node updateNode = new Node(key, value);
+        if (this.map.containsKey(key)) {
+            Node eNode = this.map.get(key);
+            deleteNode(eNode);
+        } else {
+            if(this.size == this.map.size()) {
+                Node nodeToDelete = tail.prev;
+                deleteNode(nodeToDelete);
+                this.map.remove(nodeToDelete.key);
+            }
+        }
+        addNode(updateNode);
+        this.map.put(key, updateNode);
     }
 }
 
