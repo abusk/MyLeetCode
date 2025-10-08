@@ -1,64 +1,64 @@
 class Node {
-    public Node next;
-    public Node prev;
-    public int key;
-    public int value;
+    Node next;
+    Node prev;
+    int key;
+    int val;
     public Node(int key, int value) {
         this.key = key;
-        this.value = value;
+        this.val = value;
     }
 }
 class LRUCache {
-    Map<Integer, Node> map;
     Node head;
     Node tail;
     int size;
+    Map<Integer, Node> map;
     public LRUCache(int capacity) {
-        this.size = capacity;
         map = new HashMap<>();
         head = new Node(-1, -1);
         tail = new Node(-1, -1);
+        size = capacity;
         head.next = tail;
         tail.prev = head;
     }
-
+    
     public int get(int key) {
-        int result = -1;
-        if(this.map.containsKey(key)) {
-            result = this.map.get(key).value;
-            Node eNode = this.map.get(key);
-            deleteNode(eNode);
-            Node updateNode = new Node(key, result);
-            addNode(updateNode);
-            this.map.put(key, updateNode);
+        if(!map.containsKey(key)) {
+            return -1;
         }
-        return result;
+        Node eNode = map.get(key);
+        int val = eNode.val;
+        removeNode(eNode);
+        Node newNode = new Node(key, val);
+        addInHead(newNode);
+        map.put(key, newNode);
+        return val;
     }
-    private void deleteNode(Node node) {
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
-    }
-    private void addNode(Node updateNode) {
-        updateNode.next = head.next;
-        updateNode.prev = head;
-        head.next.prev = updateNode;
-        head.next = updateNode;
-    }
-
+    
     public void put(int key, int value) {
-        Node updateNode = new Node(key, value);
-        if (this.map.containsKey(key)) {
-            Node eNode = this.map.get(key);
-            deleteNode(eNode);
+        Node nodeToUpdate = new Node(key, value);
+        if(map.containsKey(key)) {
+            Node eNode = map.get(key);
+            removeNode(eNode);
         } else {
-            if(this.size == this.map.size()) {
-                Node nodeToDelete = tail.prev;
-                deleteNode(nodeToDelete);
-                this.map.remove(nodeToDelete.key);
+            if(size == map.size()) {
+                Node tailNode = tail.prev;
+                removeNode(tailNode);
+                map.remove(tailNode.key);
             }
         }
-        addNode(updateNode);
-        this.map.put(key, updateNode);
+        addInHead(nodeToUpdate);
+        map.put(key, nodeToUpdate);
+    }
+    public void addInHead(Node newHead) {
+        newHead.next = head.next;
+        head.next.prev = newHead;
+        newHead.prev = head;
+        head.next = newHead;
+    }
+    public void removeNode(Node nodeToRemove) {
+        nodeToRemove.prev.next = nodeToRemove.next;
+        nodeToRemove.next.prev = nodeToRemove.prev;
     }
 }
 
