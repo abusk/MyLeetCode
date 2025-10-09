@@ -1,27 +1,36 @@
 class Solution {
-    record Pair(Character key, Integer val) {}
-    public static String minRemoveToMakeValid(String s) {
-        Stack<Pair> st = new Stack<>();
+    /**
+     * 3ge3uv
+     */
+    public record PIR(char paren, int index){}
+    public String minRemoveToMakeValid(String s) {
+        Stack<PIR> st = new Stack<>();
         for(int i = 0; i<s.length(); i++) {
             char ch = s.charAt(i);
             if(ch == '(') {
-                st.push(new Pair(ch, i));
+                st.push(new PIR(ch, i));
             } else if(ch == ')') {
-                if (!st.isEmpty() && st.peek().key == '(') {
-                    st.pop();
+                if(st.isEmpty()) {
+                    st.push(new PIR(ch, i));
                 } else {
-                    st.push(new Pair(ch, i));
+                    if(st.peek().paren == '(') {
+                        st.pop();
+                    } else {
+                        st.push(new PIR(ch, i));
+                    }
                 }
             }
         }
-        StringBuilder sb = new StringBuilder(s);
-        for (Pair p : st) {
-            sb.setCharAt(p.val, '#');
+        Set<Integer> set = new HashSet<>();
+        for(PIR p : st) {
+            set.add(p.index);
         }
-        return sb.toString().replace("#", "");
-    }
-
-    public static void main(String[] args) {
-        System.out.println(minRemoveToMakeValid("lee(t(c)o)de)"));
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i<s.length(); i++) {
+            if(!set.contains(i)) {
+                sb.append(s.charAt(i));
+            }
+        }
+        return sb.toString();
     }
 }
