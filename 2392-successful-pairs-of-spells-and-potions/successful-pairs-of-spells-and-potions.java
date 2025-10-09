@@ -1,32 +1,36 @@
 class Solution {
     public int[] successfulPairs(int[] spells, int[] potions, long success) {
         Arrays.sort(potions);
-        int len = spells.length;
-        int[] ans = new int[len];
-        for(int i = 0; i<len; i++) {
-            long t = (long) Math.ceil((1.0 * success) / spells[i]);
-            if(t <= potions[0]) {
-                ans[i] = potions.length;
-            } else if(t > potions[potions.length-1]) {
+        int pl = potions.length;
+        int sl = spells.length;
+        int ans[] = new int[sl];
+        for(int i = 0; i< sl; i++) {
+            if((long)potions[0] * spells[i] >= success) {
+                ans[i] = pl;
+            } else if((long)potions[pl-1] * spells[i] < success) {
                 ans[i] = 0;
             } else {
-                int pos = bs(potions, t);
-                ans[i] = potions.length - pos;
+                int ps = bs(potions, spells[i], success);
+                ans[i] = pl - ps;
             }
         }
         return ans;
     }
-    public int bs(int[] potions, long val) {
+
+    public int bs(int[] potions, int spell, long success) {
+        int len = potions.length;
+        int result = len;
         int start = 0;
-        int end = potions.length-1;
-        while(start < end) {
-            int mid = (start + end) /2;
-            if(potions[mid] < val) {
-                start = mid +1;
+        int end = len-1;
+        while (start <= end) {
+            int mid = (start + end) / 2;
+            if((long)potions[mid] * spell >= success) {
+                result = mid;
+                end = mid -1;
             } else {
-                end = mid;
+                start = mid+1;
             }
         }
-        return start;
+        return result;
     }
 }
