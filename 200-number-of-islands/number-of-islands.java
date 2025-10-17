@@ -1,33 +1,30 @@
 class Solution {
-    int[][] dirs = {{1,0},{-1, 0}, {0,1}, {0,-1}};
-    int m;
-    int n;
-    char[][] g;
     public int numIslands(char[][] grid) {
-        g = grid;
-        m = g.length;
-        n = g[0].length;
-        int c = 0;
+        int m = grid.length;
+        int n = grid[0].length;
+        int count = 0;
+        int[][] dir = {{1,0}, {0,-1}, {-1, 0}, {0, 1}};
         for(int i = 0; i<m; i++) {
             for(int j = 0; j<n; j++) {
                 if(grid[i][j] == '1') {
-                    c++;
-                    dfs(i, j);
+                    count += 1;
+                    dfs(grid, i, j, dir);
                 }
             }
         }
-        return c;
+        return count;
     }
-
-    public void dfs(int i, int j) {
-        if(i < 0 || i >= m || j < 0 || j >= n || g[i][j] == '0') {
+    public void dfs(char[][] grid, int i, int j, int[][] dir) {
+        int m = grid.length;
+        int n = grid[0].length;
+        if(i < 0 || j < 0 || i >= m || j >= n || grid[i][j] == '0' || grid[i][j] == '2') {
             return;
         }
-        g[i][j] = '0';
-        for(int[] nst : dirs) {
-            int nxtX = i + nst[0];
-            int nxtY = j + nst[1];
-            dfs(nxtX, nxtY);
+        grid[i][j] = '2';
+        for(int[] d : dir) {
+            int nexti = i + d[0];
+            int nextj = j + d[1];
+            dfs(grid, nexti, nextj, dir);
         }
     }
 }
